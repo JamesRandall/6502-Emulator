@@ -44,13 +44,18 @@ namespace Emulator6502
             _opcodeActions[Opcode.LdaAbsoluteY] = new CpuInstruction(LdaAbsoluteY, 4);
             _opcodeActions[Opcode.LdaIndirectX] = new CpuInstruction(LdaIndirectX, 6);
             _opcodeActions[Opcode.LdaIndirectY] = new CpuInstruction(LdaIndirectY, 5);
+
+            _opcodeActions[Opcode.LdxImmediate] = new CpuInstruction(LdxImmediate, 2);
+            _opcodeActions[Opcode.LdxZeroPage] = new CpuInstruction(LdxZeroPage, 3);
+            _opcodeActions[Opcode.LdxZeroPageY] = new CpuInstruction(LdxZeroPageY, 4);
+            _opcodeActions[Opcode.LdxAbsolute] = new CpuInstruction(LdxAbsolute, 4);
+            _opcodeActions[Opcode.LdxAbsoluteY] = new CpuInstruction(LdxAbsoluteY, 4);
             
             _opcodeActions[Opcode.StaAbsolute] = new CpuInstruction(StaAbsolute, 2);
             _opcodeActions[Opcode.StxAbsolute] = new CpuInstruction(StxAbsolute, 2);
             _opcodeActions[Opcode.StyAbsolute] = new CpuInstruction(StyAbsolute, 2);
         }
 
-        
         public byte A { get; set; }
         public byte X { get; set; }
         public byte Y { get; set; }
@@ -70,7 +75,7 @@ namespace Emulator6502
             while (true)
             {
                 byte opcode = GetNextByte();
-                if (opcode == 0x00) break; // brk
+                if (opcode == 0x00) break; // brk, temp
 
                 CpuInstruction instruction = _opcodeActions[opcode];
                 if (instruction != null)
@@ -99,56 +104,108 @@ namespace Emulator6502
             return (Int16)((high << 8) | low);
         }
 
-        private void SetNegativeZeroFlags()
+        private void SetNegativeZeroFlags(byte register)
         {
-            byte value = (byte)(((A == 0) ? ZeroFlagBit : 0x0) | (A & NegativeFlagBit));
+            byte value = (byte)(((register == 0) ? ZeroFlagBit : 0x0) | (register & NegativeFlagBit));
             Status = (byte)((Status & ZeroNegativeMask) | value);
         }
 
-#region LDA Opcode Handlers
+        private byte GetRegisterZeroPage()
+        {
+            byte location = GetNextByte();
+            byte register = Ram.ReadByte(location);
+            SetNegativeZeroFlags(register);
+            return register;
+        }
+
+        private byte GetRegisterZeroPageX(byte x)
+        {
+            Int16 zeroPageLocation = GetNextByte();
+            Int16 location = Ram.ReadWord(zeroPageLocation);
+            location += x;
+            byte register = Ram.ReadByte(location);
+            SetNegativeZeroFlags(register);
+            return register;
+        }
+
+        private byte GetRegisterAbsolute()
+        {
+            Int16 location = GetNextWord();
+            byte value = Ram.ReadByte(location);
+            SetNegativeZeroFlags(value);
+            return value;
+        }
+
+        private byte GetRegisterAbsoluteX(byte x)
+        {
+            Int16 location = GetNextWord();
+            location += x;
+            byte value = Ram.ReadByte(location);
+            SetNegativeZeroFlags(value);
+            return value;
+        }
+
+        #region LDX opcode handlers
+
+        private void LdxImmediate()
+        {
+            X = GetNextByte();
+            SetNegativeZeroFlags(X);
+        }
+
+        private void LdxZeroPage()
+        {
+            X = GetRegisterZeroPage();
+        }
+
+        private void LdxZeroPageY()
+        {
+            X = GetRegisterZeroPageX(Y);
+        }
+
+        private void LdxAbsolute()
+        {
+            X = GetRegisterAbsolute();
+        }
+
+        private void LdxAbsoluteY()
+        {
+            X = GetRegisterAbsoluteX(Y);
+        }
+
+        #endregion
+
+        #region LDA Opcode Handlers
 
         private void LdaImmediate()
         {
             A = GetNextByte();
-            SetNegativeZeroFlags();
+            SetNegativeZeroFlags(A);
         }
 
         private void LdaZeroPage()
         {
-            byte location = GetNextByte();
-            A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            A = GetRegisterZeroPage();
         }
 
         private void LdaZeroPageX()
         {
-            Int16 location = GetNextByte();
-            location += X;
-            A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            A = GetRegisterZeroPageX(X);
         }
 
         private void LdaAbsolute()
         {
-            Int16 location = GetNextWord();
-            A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            A = GetRegisterAbsolute();
         }
 
         private void LdaAbsoluteX()
         {
-            Int16 location = GetNextWord();
-            location += X;
-            A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            A = GetRegisterAbsoluteX(X);
         }
 
         private void LdaAbsoluteY()
         {
-            Int16 location = GetNextWord();
-            location += Y;
-            A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            A = GetRegisterAbsoluteX(Y);
         }
 
         private void LdaIndirectX()
@@ -157,7 +214,7 @@ namespace Emulator6502
             Int16 zeroPageLocation = (Int16)(GetNextByte() + X); 
             Int16 location = Ram.ReadWord(zeroPageLocation);
             A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            SetNegativeZeroFlags(A);
         }
 
         private void LdaIndirectY()
@@ -165,7 +222,7 @@ namespace Emulator6502
             byte zeroPageLocation = GetNextByte();
             Int16 location = (Int16)(Ram.ReadWord(zeroPageLocation) + Y);
             A = Ram.ReadByte(location);
-            SetNegativeZeroFlags();
+            SetNegativeZeroFlags(A);
         }
 
 #endregion

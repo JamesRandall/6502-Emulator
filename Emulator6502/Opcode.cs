@@ -11,6 +11,12 @@
         public const byte LdaIndirectX = 0xA1;
         public const byte LdaIndirectY = 0xB1;
 
+        public const byte LdxImmediate = 0xA2;
+        public const byte LdxZeroPage = 0xA6;
+        public const byte LdxZeroPageY = 0xB6;
+        public const byte LdxAbsolute = 0xAE;
+        public const byte LdxAbsoluteY = 0xBE;
+
         public const byte StaAbsolute = 0x8D;
         public const byte StxAbsolute = 0x8E;
         public const byte StyAbsolute = 0x8F;
