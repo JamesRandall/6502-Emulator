@@ -56,6 +56,47 @@ namespace Emulator6502.Test
         }
 
         [TestMethod]
+        public void IndirectX()
+        {
+            // Arrange
+            Cpu cpu = new Cpu();
+            cpu.Ram.WriteByte(0x1C, 0x10);
+            cpu.Ram.WriteByte(0x1D, 0x23);
+            cpu.Ram.WriteByte(0x1E, 0x45);
+            cpu.Ram.WriteByte(0x4523, 0x78);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdaIndirectX);
+            cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x1C);
+            cpu.X = 0x1;
+
+            // Act
+            cpu.Execute();
+
+            // Assert
+            Assert.AreEqual(0x78, cpu.A);
+        }
+
+        [TestMethod]
+        public void IndirectY()
+        {
+            // Arrange
+            Cpu cpu = new Cpu();
+            cpu.Ram.WriteByte(0x1C, 0x10);
+            cpu.Ram.WriteByte(0x1D, 0x23);
+            cpu.Ram.WriteByte(0x2311, 0x78);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdaIndirectY);
+            cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x1C);
+            cpu.Y = 0x1;
+
+            // Act
+            cpu.Execute();
+
+            // Assert
+            Assert.AreEqual(0x78, cpu.A);
+        }
+
+        #region Status flag updates - all tested in immediate mode
+
+        [TestMethod]
         public void ZeroFlagNotSet()
         {
             // Arrange
@@ -114,5 +155,7 @@ namespace Emulator6502.Test
             // Assert
             Assert.IsTrue(cpu.NegativeFlag);
         }
+
+        #endregion
     }
 }

@@ -39,6 +39,11 @@ namespace Emulator6502
             _opcodeActions[Opcode.LdaImmediate] = new CpuInstruction(LdaImmediate, 2);
             _opcodeActions[Opcode.LdaZeroPage] = new CpuInstruction(LdaZeroPage, 3);
             _opcodeActions[Opcode.LdaZeroPageX] = new CpuInstruction(LdaZeroPageX, 3);
+            _opcodeActions[Opcode.LdaAbsolute] = new CpuInstruction(LdaAbsolute, 4);
+            _opcodeActions[Opcode.LdaAbsoluteX] = new CpuInstruction(LdaAbsoluteX, 4);
+            _opcodeActions[Opcode.LdaAbsoluteY] = new CpuInstruction(LdaAbsoluteY, 4);
+            _opcodeActions[Opcode.LdaIndirectX] = new CpuInstruction(LdaIndirectX, 6);
+            _opcodeActions[Opcode.LdaIndirectY] = new CpuInstruction(LdaIndirectY, 5);
             
             _opcodeActions[Opcode.StaAbsolute] = new CpuInstruction(StaAbsolute, 2);
             _opcodeActions[Opcode.StxAbsolute] = new CpuInstruction(StxAbsolute, 2);
@@ -100,7 +105,7 @@ namespace Emulator6502
             Status = (byte)((Status & ZeroNegativeMask) | value);
         }
 
-        #region Opcode Handlers
+#region LDA Opcode Handlers
 
         private void LdaImmediate()
         {
@@ -122,6 +127,50 @@ namespace Emulator6502
             A = Ram.ReadByte(location);
             SetNegativeZeroFlags();
         }
+
+        private void LdaAbsolute()
+        {
+            Int16 location = GetNextWord();
+            A = Ram.ReadByte(location);
+            SetNegativeZeroFlags();
+        }
+
+        private void LdaAbsoluteX()
+        {
+            Int16 location = GetNextWord();
+            location += X;
+            A = Ram.ReadByte(location);
+            SetNegativeZeroFlags();
+        }
+
+        private void LdaAbsoluteY()
+        {
+            Int16 location = GetNextWord();
+            location += Y;
+            A = Ram.ReadByte(location);
+            SetNegativeZeroFlags();
+        }
+
+        private void LdaIndirectX()
+        {
+            // what happens on oxff boundary
+            Int16 zeroPageLocation = (Int16)(GetNextByte() + X); 
+            Int16 location = Ram.ReadWord(zeroPageLocation);
+            A = Ram.ReadByte(location);
+            SetNegativeZeroFlags();
+        }
+
+        private void LdaIndirectY()
+        {
+            byte zeroPageLocation = GetNextByte();
+            Int16 location = (Int16)(Ram.ReadWord(zeroPageLocation) + Y);
+            A = Ram.ReadByte(location);
+            SetNegativeZeroFlags();
+        }
+
+#endregion
+
+        #region Store opcodes
 
         private void StaAbsolute()
         {
