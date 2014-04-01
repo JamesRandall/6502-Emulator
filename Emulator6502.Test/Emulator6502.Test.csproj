@@ -51,6 +51,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="LdaTests.cs" />
+    <Compile Include="LdxTests.cs" />
+    <Compile Include="LdyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

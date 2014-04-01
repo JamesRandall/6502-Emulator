@@ -46,9 +46,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(0x1E, 0x10);
-            cpu.Ram.WriteByte(0x1F, 0x23);
-            cpu.Ram.WriteByte(0x2311, 0x5);
+            cpu.Ram.WriteByte(0x1F, 0x5);
             cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxZeroPageY);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x1E);
             cpu.Y = 0x1;

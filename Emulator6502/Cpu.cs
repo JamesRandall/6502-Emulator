@@ -50,6 +50,12 @@ namespace Emulator6502
             _opcodeActions[Opcode.LdxZeroPageY] = new CpuInstruction(LdxZeroPageY, 4);
             _opcodeActions[Opcode.LdxAbsolute] = new CpuInstruction(LdxAbsolute, 4);
             _opcodeActions[Opcode.LdxAbsoluteY] = new CpuInstruction(LdxAbsoluteY, 4);
+
+            _opcodeActions[Opcode.LdyImmediate] = new CpuInstruction(LdyImmediate, 2);
+            _opcodeActions[Opcode.LdyZeroPage] = new CpuInstruction(LdyZeroPage, 3);
+            _opcodeActions[Opcode.LdyZeroPageX] = new CpuInstruction(LdyZeroPageX, 4);
+            _opcodeActions[Opcode.LdyAbsolute] = new CpuInstruction(LdyAbsolute, 4);
+            _opcodeActions[Opcode.LdyAbsoluteX] = new CpuInstruction(LdyAbsoluteX, 4);
             
             _opcodeActions[Opcode.StaAbsolute] = new CpuInstruction(StaAbsolute, 2);
             _opcodeActions[Opcode.StxAbsolute] = new CpuInstruction(StxAbsolute, 2);
@@ -120,9 +126,8 @@ namespace Emulator6502
 
         private byte GetRegisterZeroPageX(byte x)
         {
-            Int16 zeroPageLocation = GetNextByte();
-            Int16 location = Ram.ReadWord(zeroPageLocation);
-            location += x;
+            Int16 location = (Int16)(GetNextByte() + x);
+            if (location > 0xFF) location -= 0xFF;
             byte register = Ram.ReadByte(location);
             SetNegativeZeroFlags(register);
             return register;
@@ -171,6 +176,36 @@ namespace Emulator6502
         private void LdxAbsoluteY()
         {
             X = GetRegisterAbsoluteX(Y);
+        }
+
+        #endregion
+
+        #region LDY opcode handlers
+
+        private void LdyImmediate()
+        {
+            Y = GetNextByte();
+            SetNegativeZeroFlags(Y);
+        }
+
+        private void LdyZeroPage()
+        {
+            Y = GetRegisterZeroPage();
+        }
+
+        private void LdyZeroPageX()
+        {
+            Y = GetRegisterZeroPageX(X);
+        }
+
+        private void LdyAbsolute()
+        {
+            Y = GetRegisterAbsolute();
+        }
+
+        private void LdyAbsoluteX()
+        {
+            Y = GetRegisterAbsoluteX(X);
         }
 
         #endregion
