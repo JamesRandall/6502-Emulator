@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Emulator6502.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Emulator6502.Test
@@ -15,7 +16,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxImmediate);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxImmediate);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 41);
 
             // Act
@@ -31,7 +32,7 @@ namespace Emulator6502.Test
             // Arrange
             Cpu cpu = new Cpu();
             cpu.Ram.WriteByte(0xF, 41);
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxZeroPage);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxZeroPage);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0xF);
 
             // Act
@@ -47,7 +48,7 @@ namespace Emulator6502.Test
             // Arrange
             Cpu cpu = new Cpu();
             cpu.Ram.WriteByte(0x1F, 0x5);
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxZeroPageY);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxZeroPageY);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x1E);
             cpu.Y = 0x1;
 
@@ -64,7 +65,7 @@ namespace Emulator6502.Test
             // Arrange
             Cpu cpu = new Cpu();
             cpu.Ram.WriteByte(0x2310, 0x5);
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxAbsolute);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxAbsolute);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x10);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 2), 0x23);
 
@@ -82,7 +83,7 @@ namespace Emulator6502.Test
             // Arrange
             Cpu cpu = new Cpu();
             cpu.Ram.WriteByte(0x2311, 0x5);
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxAbsoluteY);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxAbsoluteY);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0x10);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 2), 0x23);
             cpu.Y = 0x1;
@@ -101,7 +102,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxImmediate);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxImmediate);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 1);
 
             // Act
@@ -116,7 +117,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxImmediate);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxImmediate);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 0);
 
             // Act
@@ -131,7 +132,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxImmediate);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxImmediate);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 127);
 
             // Act
@@ -146,7 +147,7 @@ namespace Emulator6502.Test
         {
             // Arrange
             Cpu cpu = new Cpu();
-            cpu.Ram.WriteByte(cpu.ProgramCounter, Opcode.LdxImmediate);
+            cpu.Ram.WriteByte(cpu.ProgramCounter, Mnemonic.LdxImmediate);
             cpu.Ram.WriteByte((Int16)(cpu.ProgramCounter + 1), 255);
 
             // Act

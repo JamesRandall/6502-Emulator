@@ -1,6 +1,6 @@
 ﻿namespace Emulator6502
 {
-    public class Opcode
+    public class Mnemonic
     {
         public const byte LdaImmediate = 0xA9;
         public const byte LdaZeroPage = 0xA5;

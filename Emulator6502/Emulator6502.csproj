@@ -36,10 +36,19 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cpu.cs" />
+    <Compile Include="Components\Cpu.cs" />
     <Compile Include="Components\CpuInstruction.cs" />
+    <Compile Include="Components\OpcodeExecuters\Ldx.cs" />
+    <Compile Include="Components\OpcodeExecuters\Ldy.cs" />
+    <Compile Include="Components\OpcodeExecuters\Sta.cs" />
+    <Compile Include="Components\OpcodeExecuters\Stx.cs" />
+    <Compile Include="Components\OpcodeExecuters\Sty.cs" />
+    <Compile Include="Components\StatusFlagBits.cs" />
+    <Compile Include="ICpu.cs" />
     <Compile Include="IRam.cs" />
-    <Compile Include="Opcode.cs" />
+    <Compile Include="Mnemonic.cs" />
+    <Compile Include="Components\OpcodeExecuters\Lda.cs" />
+    <Compile Include="Components\OpcodeExecuterBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\Ram.cs" />
     <Compile Include="UnsupportedOpcodeException.cs" />
