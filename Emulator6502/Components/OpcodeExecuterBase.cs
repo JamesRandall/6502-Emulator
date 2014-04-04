@@ -15,9 +15,9 @@ namespace Emulator6502.Components
 
         public abstract void Register(CpuInstruction[] opcodeHandlers);
 
-        protected void SetNegativeZeroFlags(byte register)
+        protected void SetNegativeZeroFlags(byte changedValue)
         {
-            byte value = (byte)(((register == 0) ? StatusFlagBits.ZeroFlagBit : 0x0) | (register & StatusFlagBits.NegativeFlagBit));
+            byte value = (byte)(((changedValue == 0) ? StatusFlagBits.ZeroFlagBit : 0x0) | (changedValue & StatusFlagBits.NegativeFlagBit));
             Cpu.Status = (byte)((Cpu.Status & StatusFlagBits.ZeroNegativeMask) | value);
         }
 
@@ -31,11 +31,16 @@ namespace Emulator6502.Components
 
         protected byte GetRegisterZeroPageX(byte x)
         {
-            Int16 location = (Int16)(Cpu.GetNextByte() + x);
-            if (location > 0xFF) location -= 0xFF;
+            Int16 location = GetZeroPageXAddress(Cpu.GetNextByte(), x);
             byte register = Cpu.Ram.ReadByte(location);
             SetNegativeZeroFlags(register);
             return register;
+        }
+
+        protected Int16 GetZeroPageXAddress(byte zeroPage, byte x)
+        {
+            Int16 location = (Int16) ((zeroPage + x) & 0xFF);
+            return location;
         }
 
         protected byte GetRegisterAbsolute()
@@ -46,13 +51,30 @@ namespace Emulator6502.Components
             return value;
         }
 
+        protected Int16 GetAbsoluteXAddress(Int16 absoluteLocation, byte x)
+        {
+            return (Int16) (absoluteLocation + x);
+        }
+
         protected byte GetRegisterAbsoluteX(byte x)
         {
-            Int16 location = Cpu.GetNextWord();
-            location += x;
+            Int16 location = GetAbsoluteXAddress(Cpu.GetNextWord(), x);
             byte value = Cpu.Ram.ReadByte(location);
             SetNegativeZeroFlags(value);
             return value;
+        }
+
+        protected Int16 GetIndirectXAddress(byte zeroPageAddress, byte x)
+        {
+            Int16 zeroPageLocation = (Int16)(zeroPageAddress + x);
+            Int16 location = Cpu.Ram.ReadWord(zeroPageLocation);
+            return location;
+        }
+
+        protected Int16 GetIndirectYAddress(byte zeroPageAddress, byte y)
+        {
+            Int16 location = (Int16)(Cpu.Ram.ReadWord(zeroPageAddress) + Cpu.Y);
+            return location;
         }
     }
 }

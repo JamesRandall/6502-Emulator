@@ -36,6 +36,8 @@ namespace Emulator6502.Components
             new Sta(this).Register(_opcodeActions);
             new Stx(this).Register(_opcodeActions);
             new Sty(this).Register(_opcodeActions);
+
+            new Inc(this).Register(_opcodeActions);
         }
 
         public byte A { get; set; }

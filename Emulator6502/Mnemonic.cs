@@ -23,8 +23,25 @@
         public const byte LdyAbsolute = 0xAC;
         public const byte LdyAbsoluteX = 0xBC;
 
+        public const byte StaZeroPage = 0x85;
+        public const byte StaZeroPageX = 0x95;
         public const byte StaAbsolute = 0x8D;
+        public const byte StaAbsoluteX = 0x9D;
+        public const byte StaAbsoluteY = 0x99;
+        public const byte StaIndirectX = 0x81;
+        public const byte StaIndirectY = 0x91;
+
         public const byte StxAbsolute = 0x8E;
+        public const byte StxZeroPage = 0x86;
+        public const byte StxZeroPageY = 0x96;
+
         public const byte StyAbsolute = 0x8F;
+        public const byte StyZeroPage = 0x84;
+        public const byte StyZeroPageX = 0x94;
+
+        public const byte IncZeroPage = 0xE6;
+        public const byte IncZeroPageX = 0xF6;
+        public const byte IncAbsolute = 0xEE;
+        public const byte IncAbsoluteX = 0xFE;
     }
 }

@@ -8,35 +8,35 @@
 
         public override void Register(CpuInstruction[] opcodeHandlers)
         {
-            opcodeHandlers[Mnemonic.LdyImmediate] = new CpuInstruction(LdyImmediate, 2);
-            opcodeHandlers[Mnemonic.LdyZeroPage] = new CpuInstruction(LdyZeroPage, 3);
-            opcodeHandlers[Mnemonic.LdyZeroPageX] = new CpuInstruction(LdyZeroPageX, 4);
-            opcodeHandlers[Mnemonic.LdyAbsolute] = new CpuInstruction(LdyAbsolute, 4);
-            opcodeHandlers[Mnemonic.LdyAbsoluteX] = new CpuInstruction(LdyAbsoluteX, 4);
+            opcodeHandlers[Mnemonic.LdyImmediate] = new CpuInstruction(Immediate, 2);
+            opcodeHandlers[Mnemonic.LdyZeroPage] = new CpuInstruction(ZeroPage, 3);
+            opcodeHandlers[Mnemonic.LdyZeroPageX] = new CpuInstruction(ZeroPageX, 4);
+            opcodeHandlers[Mnemonic.LdyAbsolute] = new CpuInstruction(Absolute, 4);
+            opcodeHandlers[Mnemonic.LdyAbsoluteX] = new CpuInstruction(AbsoluteX, 4);
         }
 
-        private void LdyImmediate()
+        private void Immediate()
         {
             Cpu.Y = Cpu.GetNextByte();
             SetNegativeZeroFlags(Cpu.Y);
         }
 
-        private void LdyZeroPage()
+        private void ZeroPage()
         {
             Cpu.Y = GetRegisterZeroPage();
         }
 
-        private void LdyZeroPageX()
+        private void ZeroPageX()
         {
             Cpu.Y = GetRegisterZeroPageX(Cpu.X);
         }
 
-        private void LdyAbsolute()
+        private void Absolute()
         {
             Cpu.Y = GetRegisterAbsolute();
         }
 
-        private void LdyAbsoluteX()
+        private void AbsoluteX()
         {
             Cpu.Y = GetRegisterAbsoluteX(Cpu.X);
         }

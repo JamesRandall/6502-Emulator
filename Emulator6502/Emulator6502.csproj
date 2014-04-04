@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Components\Cpu.cs" />
     <Compile Include="Components\CpuInstruction.cs" />
+    <Compile Include="Components\OpcodeExecuters\Inc.cs" />
     <Compile Include="Components\OpcodeExecuters\Ldx.cs" />
     <Compile Include="Components\OpcodeExecuters\Ldy.cs" />
     <Compile Include="Components\OpcodeExecuters\Sta.cs" />
