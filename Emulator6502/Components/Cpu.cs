@@ -59,6 +59,7 @@ namespace Emulator6502.Components
             while (true)
             {
                 byte opcode = GetNextByte();
+                if (opcode == 0xEA) continue; //noop, do nothing
                 if (opcode == 0x00) break; // brk, temp
 
                 CpuInstruction instruction = _opcodeActions[opcode];
